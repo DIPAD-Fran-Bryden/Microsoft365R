@@ -15,6 +15,7 @@
 #' - `do_operation(...)`: Carry out an arbitrary operation on the email.
 #' - `sync_fields()`: Synchronise the R object with the email metadata in Microsoft Graph.
 #' - `set_body(body=NULL, content_type=NULL)`: Update the email body. See 'Editing an email' below.
+#' - `add_body(body=NULL, content_type=NULL)`: Add to the existing email body. See 'Editing an email' below.
 #' - `set_subject(subject)`: Update the email subject line.
 #' - `set_recipients(to=NULL, cc=NULL, bcc=NULL)`: Set the recipients for the email, overwriting any existing recipients.
 #' - `add_recipients(to=NULL, cc=NULL, bcc=NULL)`: Adds recipients for the email, leaving existing ones unchanged.
@@ -232,6 +233,14 @@ public=list(
             content_type <- self$properties$body$contentType
         req <- build_email_request(body, content_type)
         do.call(self$update, req)
+    },
+    
+    add_body=function(body=NULL)
+    {
+      content_type <- self$properties$body$contentType
+      body <- paste(body, self$properties$body$content)
+      req <- build_email_request(body, content_type)
+      do.call(self$update, req)
     },
 
     set_subject=function(subject)
